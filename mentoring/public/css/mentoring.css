@@ -60,8 +60,22 @@
 
 .mentoring .checkmark-correct {
     color: #006600;
+    color:  #629b2b;
+    float: left;
 }
-
+ 
 .mentoring .checkmark-incorrect {
     color: #ff0000;
+    float: left;
 }
+
+.mentoring div {
+    overflow: hidden;
+}
+
+.mentoring .choice-result{
+    display:block;
+    float: left;
+    height:33.33px;
+}
+
