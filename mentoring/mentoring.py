@@ -148,13 +148,18 @@ class MentoringBlock(XBlockWithLightChildren, StepParentMixin):
         """
         Create a JSON-dumpable object with readable key names from a list of student answers.
         """
-        return [
-            {
-                'number': self.get_question_number(answer[0]),
-                'id': answer[0],
-                'details': answer[1],
-            } for answer in self.student_results if answer[1]['status'] == answer_status
-        ]
+        answer_map = []
+        for answer in self.student_results:
+            if answer[1]['status'] == answer_status:
+                try:
+                    answer_map.append({
+                        'number': self.get_question_number(answer[0]),
+                        'id': answer[0],
+                        'details': answer[1],
+                    })
+                except ValueError:
+                    pass
+        return answer_map
 
     @property
     def score(self):
