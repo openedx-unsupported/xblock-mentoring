@@ -288,12 +288,12 @@ class MentoringAssessmentTest(MentoringBaseTest):
         self.assert_hidden(controls.review_link)
 
     def assert_messages_text(self, mentoring, text):
-        messages = mentoring.find_element_by_css_selector('.messages')
+        messages = mentoring.find_element_by_css_selector('.assessment-messages')
         self.assertEqual(messages.text, text)
         self.assertTrue(messages.is_displayed())
 
     def assert_messages_empty(self, mentoring):
-        messages = mentoring.find_element_by_css_selector('.messages')
+        messages = mentoring.find_element_by_css_selector('.assessment-messages')
         self.assertEqual(messages.text, '')
         self.assertFalse(messages.find_elements_by_xpath('./*'))
         self.assertFalse(messages.is_displayed())
@@ -347,7 +347,6 @@ class MentoringAssessmentTest(MentoringBaseTest):
                 "correct": 2, "partial": 1, "incorrect": 1, "percentage": 63,
                 "num_attempts": 1, "max_attempts": 2}
         self.peek_at_review(mentoring, controls, expected_results, extended_feedback=extended_feedback)
-
         self.assert_messages_text(mentoring, "Assessment additional feedback message text")
         self.assert_clickable(controls.try_again)
         controls.try_again.click()
