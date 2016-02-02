@@ -1,5 +1,7 @@
 DEBUG = True
 
+SECRET_KEY = 'please change it in production environment'
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
