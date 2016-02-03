@@ -42,7 +42,6 @@ class MCQBlockTest(MentoringBaseTest):
         Since the bug does not affect other content, asking Selenium
         to click on the legend first, will properly scroll it.
         """
-        # mcq_legend.click()
         self.scroll_to(mcq_legend)
 
     def _get_labels(self, choices):
