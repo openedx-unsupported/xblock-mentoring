@@ -19,6 +19,8 @@ install:
     - "pip install --ignore-installed -r test_requirements.txt"
     - "pip install mysqlclient"
     - "pip uninstall -y xblock-mentoring && python setup.py sdist && pip install dist/xblock-mentoring-0.1.tar.gz"
+# Install sa known selenium version, so we get reproducibility
+    - pip install selenium==2.50.1
 script:
     - pep8 mentoring --max-line-length=120
     # Run pylint on any modified .py files but since there are a lot of issues right now, don't make it fail the build:
