@@ -8,6 +8,8 @@ before_install:
     - "sh -e /etc/init.d/xvfb start"
     - "git fetch origin master:pylint-basis"
     - "git diff pylint-basis --name-only  -- '*.py' > CHANGED_PY_FILES"
+# This is workaround for bug https://code.djangoproject.com/ticket/25329;
+# you might remove this line after upgrade to django 1.8+
     - mysql -e 'set global wait_timeout=3600'
 install:
     - "pip install -e git://github.com/edx/xblock-sdk.git@bddf9f4a2c6e4df28a411c8f632cc2250170ae9d#egg=xblock-sdk"

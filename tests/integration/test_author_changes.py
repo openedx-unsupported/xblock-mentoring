@@ -22,7 +22,6 @@ class AuthorChangesTest(MentoringTest):
         """
         [Re]load the page with our scenario
         """
-        # self.driver.refresh()
         self.mentoring_dom = self.go_to_view("student_view")
         self.reload_mentoring_block()
 
