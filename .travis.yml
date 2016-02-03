@@ -25,4 +25,4 @@ script:
 notifications:
   email: false
 addons:
-  firefox: "44.0"
+  firefox: "38.0"
