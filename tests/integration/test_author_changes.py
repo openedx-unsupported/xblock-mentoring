@@ -9,10 +9,6 @@ import ddt
 from .test_assessment import MentoringAssessmentBaseTest
 import re
 
-import faulthandler
-faulthandler.enable()
-
-
 class AuthorChangesTest(MentoringTest):
     """
     Test various scenarios involving author changes made to a block already in use by students
