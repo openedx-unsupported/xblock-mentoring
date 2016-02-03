@@ -22,8 +22,6 @@
 #
 
 # Imports ###########################################################
-from unittest import skip
-
 import ddt
 from .base_test import MentoringBaseTest
 

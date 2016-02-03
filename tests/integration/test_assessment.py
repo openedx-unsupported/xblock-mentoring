@@ -1,5 +1,3 @@
-from unittest import skip
-
 from ddt import ddt, data, unpack
 from .base_test import MentoringTest
 
@@ -350,7 +348,6 @@ class MentoringAssessmentBaseTest(MentoringTest):
 @ddt
 class MentoringAssessmentTest(MentoringAssessmentBaseTest):
 
-    # @skip("Throws an exception")
     @data((1, False), ('extended_feedback', True))
     @unpack
     def test_assessment(self, assessment, extended_feedback):

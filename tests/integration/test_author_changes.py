@@ -2,7 +2,6 @@
 If an author makes changes to the block after students have started using it, will bad things
 happen?
 """
-from unittest.case import skip
 
 from .base_test import MentoringTest
 import ddt
@@ -13,8 +12,6 @@ class AuthorChangesTest(MentoringTest):
     """
     Test various scenarios involving author changes made to a block already in use by students
     """
-
-    # cleans_up_after_itself = True
 
     def setUp(self):
         super(AuthorChangesTest, self).setUp()
