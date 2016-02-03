@@ -44,7 +44,8 @@ class MCQBlockTest(MentoringBaseTest):
         Since the bug does not affect other content, asking Selenium
         to click on the legend first, will properly scroll it.
         """
-        mcq_legend.click()
+        # mcq_legend.click()
+        self.driver.execute_script("return arguments[0].scrollIntoView();", mcq_legend)
 
     def _get_labels(self, choices):
         return [choice.find_element_by_css_selector('label') for choice in choices]
@@ -208,6 +209,7 @@ class MCQBlockTest(MentoringBaseTest):
     def test_questionnaire_html_choices(self, page):
         mentoring = self.go_to_page(page)
         choices_list = mentoring.find_element_by_css_selector(".choices-list")
+        scenario_title = mentoring.find_element_by_css_selector('h2.main')
         messages = mentoring.find_element_by_css_selector('.messages')
 
         expected_options = [
@@ -226,7 +228,7 @@ class MCQBlockTest(MentoringBaseTest):
         self.assertFalse(submit.is_enabled())
 
         inputs = choices_list.find_elements_by_css_selector('.choice-selector input')
-        self._selenium_bug_workaround_scroll_to(choices_list)
+        self._selenium_bug_workaround_scroll_to(scenario_title)
         inputs[0].click()
         inputs[1].click()
         inputs[2].click()
