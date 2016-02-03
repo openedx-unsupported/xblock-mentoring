@@ -90,6 +90,7 @@ class MentoringTest(SeleniumXBlockTest, PopupCheckMixin):
         submit = mentoring.find_element_by_css_selector('.submit input.input-main')
         self.assertTrue(submit.is_displayed())
         self.assertTrue(submit.is_enabled())
+        self.driver.execute_script("return window.scrollTo(0, arguments[0]-300);", submit.location['y'])
         submit.click()
         self.wait_until_disabled(submit)
 

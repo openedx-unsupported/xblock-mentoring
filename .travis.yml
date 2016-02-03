@@ -20,7 +20,7 @@ script:
     - pep8 mentoring --max-line-length=120
     # Run pylint on any modified .py files but since there are a lot of issues right now, don't make it fail the build:
     - "[ -s CHANGED_PY_FILES ] && (cat CHANGED_PY_FILES | xargs pylint || echo -e \\\\nWARNING: PYLINT ERRORS) || echo pylint skipped"
-    - python tests/manage.py test --rednose --settings=settings_travis --noinput
+    - python tests/manage.py test --rednose --settings=settings_travis --noinput --immediate
 notifications:
   email: false
 addons:
