@@ -42,24 +42,30 @@ class PopupCheckMixin(object):
 
         submit = mentoring.find_element_by_css_selector('.submit input.input-main')
 
+        scenario_title = mentoring.find_element_by_css_selector('h2.main')
+
+        question_title = mentoring.find_element_by_css_selector('h3.question-title')
+
         for index, expected_feedback in enumerate(item_feedbacks):
             choice_wrapper = choices_list.find_elements_by_css_selector(".choice")[index]
             if do_submit:
                 # click on actual radio button:
                 choice_wrapper.find_element_by_css_selector(".choice-selector input").click()
                 submit.click()
+                self.wait_until_exists('.choice-result.checkmark-incorrect,.choice-result.checkmark-correct')
             item_feedback_icon = choice_wrapper.find_element_by_css_selector(".choice-result")
-            choice_wrapper.click()
+            # choice_wrapper.click()
             item_feedback_icon.click()  # clicking on item feedback icon
             item_feedback_popup = choice_wrapper.find_element_by_css_selector(".choice-tips")
+            self.wait_until_text_in(expected_feedback, item_feedback_popup)
             self.assertTrue(item_feedback_popup.is_displayed())
-            self.assertEqual(item_feedback_popup.text, expected_feedback)
 
             item_feedback_popup.click()
             self.assertTrue(item_feedback_popup.is_displayed())
 
-            mentoring.click()
-            self.assertFalse(item_feedback_popup.is_displayed())
+            self.driver.execute_script("return arguments[0].scrollIntoView();", scenario_title)
+            question_title.click()
+            self.wait_until_hidden(item_feedback_popup)
 
 
 class MentoringTest(SeleniumXBlockTest, PopupCheckMixin):
