@@ -30,7 +30,21 @@ from xblockutils.resources import ResourceLoader
 loader = ResourceLoader(__name__)
 
 
-class PopupCheckMixin(object):
+class ScrollToMixin(object):
+
+    def scroll_to(self, component, offset=0):
+        """
+        Scrolls browser viewport so component is visible. In rare cases you might
+        need to provide an offset, which will change position by some amount
+        of pixels.
+        :return:
+        """
+        self.driver.execute_script(
+                "return window.scrollTo(0, arguments[0]);",
+                component.location['y']+offset)
+
+
+class PopupCheckMixin(ScrollToMixin):
     """
     Helper method used by both test base classes
     """
@@ -63,7 +77,7 @@ class PopupCheckMixin(object):
             item_feedback_popup.click()
             self.assertTrue(item_feedback_popup.is_displayed())
 
-            self.driver.execute_script("return arguments[0].scrollIntoView();", scenario_title)
+            self.scroll_to(scenario_title)
             question_title.click()
             self.wait_until_hidden(item_feedback_popup)
 
@@ -90,7 +104,7 @@ class MentoringTest(SeleniumXBlockTest, PopupCheckMixin):
         submit = mentoring.find_element_by_css_selector('.submit input.input-main')
         self.assertTrue(submit.is_displayed())
         self.assertTrue(submit.is_enabled())
-        self.driver.execute_script("return window.scrollTo(0, arguments[0]-300);", submit.location['y'])
+        self.scroll_to(submit, -300)
         submit.click()
         self.wait_until_disabled(submit)
 

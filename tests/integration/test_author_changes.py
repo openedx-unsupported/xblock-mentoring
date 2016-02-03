@@ -29,7 +29,6 @@ class AuthorChangesTest(MentoringTest):
         self.mentoring_dom = self.go_to_view("student_view")
         self.reload_mentoring_block()
 
-
     def reload_mentoring_block(self):
         """
         [Re]load the mentoring block, potentially with updated field data

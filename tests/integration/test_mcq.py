@@ -45,7 +45,7 @@ class MCQBlockTest(MentoringBaseTest):
         to click on the legend first, will properly scroll it.
         """
         # mcq_legend.click()
-        self.driver.execute_script("return arguments[0].scrollIntoView();", mcq_legend)
+        self.scroll_to(mcq_legend)
 
     def _get_labels(self, choices):
         return [choice.find_element_by_css_selector('label') for choice in choices]
