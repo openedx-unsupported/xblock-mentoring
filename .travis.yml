@@ -1,4 +1,6 @@
 language: python
+services:
+  - mysql
 python:
     - "2.7"
 before_install:
@@ -12,12 +14,13 @@ install:
     - "pip install -r $VIRTUAL_ENV/src/xblock-sdk/requirements/base.txt"
     - "pip install -r $VIRTUAL_ENV/src/xblock-sdk/requirements/test.txt"
     - "pip install --ignore-installed -r test_requirements.txt"
+    - "pip install mysqlclient"
     - "pip uninstall -y xblock-mentoring && python setup.py sdist && pip install dist/xblock-mentoring-0.1.tar.gz"
 script:
     - pep8 mentoring --max-line-length=120
     # Run pylint on any modified .py files but since there are a lot of issues right now, don't make it fail the build:
     - "[ -s CHANGED_PY_FILES ] && (cat CHANGED_PY_FILES | xargs pylint || echo -e \\\\nWARNING: PYLINT ERRORS) || echo pylint skipped"
-    - python tests/manage.py test --rednose
+    - python tests/manage.py test --rednose --settings=settings_travis --noinput
 notifications:
   email: false
 addons:
