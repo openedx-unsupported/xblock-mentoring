@@ -9,11 +9,17 @@ import ddt
 from .test_assessment import MentoringAssessmentBaseTest
 import re
 
+import faulthandler
+faulthandler.enable()
+
 
 class AuthorChangesTest(MentoringTest):
     """
     Test various scenarios involving author changes made to a block already in use by students
     """
+
+    # cleans_up_after_itself = True
+
     def setUp(self):
         super(AuthorChangesTest, self).setUp()
         self.load_scenario("author_changes.xml", {"mode": "standard", "use_intro": False}, load_immediately=False)
@@ -23,8 +29,10 @@ class AuthorChangesTest(MentoringTest):
         """
         [Re]load the page with our scenario
         """
+        # self.driver.refresh()
         self.mentoring_dom = self.go_to_view("student_view")
         self.reload_mentoring_block()
+
 
     def reload_mentoring_block(self):
         """
@@ -32,6 +40,7 @@ class AuthorChangesTest(MentoringTest):
         """
         vertical = self.load_root_xblock()
         self.mentoring = vertical.runtime.get_block(vertical.children[0])
+        self.wait_until_text_in("QUESTION", self.mentoring_dom)
 
     def submit_answers(self, q1_answer='yes', q2_answer='elegance', q3_answer="It's boring."):
         """ Answer all three questions in the 'author_changes.xml' scenario correctly """
@@ -47,7 +56,6 @@ class AuthorChangesTest(MentoringTest):
         self.mentoring.save()
         self.reload_mentoring_block()
 
-    @skip("Segfault spontaneously")
     def test_change_xml_cosmetic(self):
         """ Test that we make cosmetic changes to the XML without affecting student data: """
         self.assertEqual(self.mentoring.score.percentage, 0)  # Sanity/precondition check

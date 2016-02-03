@@ -26,8 +26,8 @@ class MentoringAssessmentBaseTest(MentoringTest):
         """
         controls = mentoring.find_element_by_css_selector("div.submit")
         title = mentoring.find_element_by_css_selector("h3.question-title")
-        controls.click()
-        title.click()
+        self.driver.execute_script("return arguments[0].scrollIntoView();", controls)
+        self.driver.execute_script("return arguments[0].scrollIntoView();", title)
 
     def assert_hidden(self, elem):
         self.assertFalse(elem.is_displayed())
@@ -350,7 +350,7 @@ class MentoringAssessmentBaseTest(MentoringTest):
 @ddt
 class MentoringAssessmentTest(MentoringAssessmentBaseTest):
 
-    @skip("Throws an exception")
+    # @skip("Throws an exception")
     @data((1, False), ('extended_feedback', True))
     @unpack
     def test_assessment(self, assessment, extended_feedback):
