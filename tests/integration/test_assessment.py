@@ -1,10 +1,4 @@
-import time
-
-import mock
 from ddt import ddt, data, unpack
-from django.test.utils import override_settings
-from mentoring.mentoring import MentoringBlock
-from selenium.webdriver.support.wait import WebDriverWait
 from .base_test import MentoringTest
 
 CORRECT, INCORRECT, PARTIAL = "correct", "incorrect", "partially-correct"
