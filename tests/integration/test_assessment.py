@@ -2,7 +2,9 @@ import time
 
 import mock
 from ddt import ddt, data, unpack
+from django.test.utils import override_settings
 from mentoring.mentoring import MentoringBlock
+from selenium.webdriver.support.wait import WebDriverWait
 from .base_test import MentoringTest
 
 CORRECT, INCORRECT, PARTIAL = "correct", "incorrect", "partially-correct"
@@ -435,22 +437,13 @@ class MentoringAssessmentTest(MentoringAssessmentBaseTest):
         Test button is unblocked after a
         """
 
-        def replacement(*args, **kwargs):
-            # Wait until disabled uses polling, if this function takes
-            # shorter than poll interval we might not observe that
-            # button is disabled. This might be a race condition, but
-            # I didn't find a better way to do it.
-            time.sleep(1)
-            raise ValueError()
+        self.load_scenario("assessment_2.xml", load_immediately=False)
+        mentoring, controls = self.go_to_assessment()
 
-        with mock.patch.object(MentoringBlock, 'submit', replacement):
-
-            self.load_scenario("assessment_2.xml", load_immediately=False)
-            mentoring, controls = self.go_to_assessment()
-
-            self.just_select_on_a_single_choice_question(
-                    0, mentoring, controls, "Yes", True)
-            self.timeout = 20
+        self.just_select_on_a_single_choice_question(
+                0, mentoring, controls, "Yes", True)
+        self.timeout = 20
+        with self.settings(ROOT_URLCONF='integration.urls_for_reenable_submit_test'):
             controls.submit.click()
             self.wait_until_disabled(controls.submit)
             enabled_button_selector = '{} .submit input:not([disabled]).input-main'
