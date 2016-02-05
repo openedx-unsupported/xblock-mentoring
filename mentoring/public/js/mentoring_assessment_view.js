@@ -284,7 +284,10 @@ function MentoringAssessmentView(runtime, element, mentoring) {
         $('.grade').data(response);
     }
 
-    function calculate_results(handler_name, callback) {
+    function calculate_results(handler_name, successs_callback, error_callback) {
+        if (typeof error_callback === 'undefined'){
+            error_callback = function () {};
+        }
         var data = {};
         var child = mentoring.children[active_child];
         if (child && child.name !== undefined) {
@@ -294,12 +297,23 @@ function MentoringAssessmentView(runtime, element, mentoring) {
         if (submitXHR) {
             submitXHR.abort();
         }
-        submitXHR = $.post(handlerUrl, JSON.stringify(data)).success(callback);
+        var opts = {
+            type: "POST",
+            url: handlerUrl,
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            success: successs_callback,
+            error: error_callback
+        };
+        submitXHR = $.ajax(opts)
     }
 
     function submit() {
         submitDOM.attr('disabled', 'disabled');
-        calculate_results('submit', handleSubmitResults);
+        errorCallback = function () {
+            submitDOM.removeAttr("disabled");
+        };
+        calculate_results('submit', handleSubmitResults, errorCallback);
     }
 
     function get_results() {

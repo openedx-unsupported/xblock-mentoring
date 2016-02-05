@@ -1,4 +1,8 @@
+import time
+
+import mock
 from ddt import ddt, data, unpack
+from mentoring.mentoring import MentoringBlock
 from .base_test import MentoringTest
 
 CORRECT, INCORRECT, PARTIAL = "correct", "incorrect", "partially-correct"
@@ -425,6 +429,30 @@ class MentoringAssessmentTest(MentoringAssessmentBaseTest):
 
         self.wait_for_and_check_single_choice_question_result(
                 mentoring, controls, CORRECT, True)
+
+    def test_unblock_submit_on_error(self):
+        """
+        Test button is unblocked after a
+        """
+        self.load_scenario("assessment_2.xml", load_immediately=False)
+        mentoring, controls = self.go_to_assessment()
+
+        def replacement(*args, **kwargs):
+            # Wait until disabled uses polling, if this function takes
+            # shorter than poll interval we might not observe that
+            # button is disabled. This might be a race condition, but
+            # I didn't find a better way to do it.
+            time.sleep(1)
+            raise ValueError()
+
+        with mock.patch.object(MentoringBlock, 'submit', replacement):
+            self.just_select_on_a_single_choice_question(
+                    0, mentoring, controls, "Yes", True)
+
+            controls.submit.click()
+            self.wait_until_disabled(controls.submit)
+            enabled_button_selector = '{} .submit input:not([disabled]).input-main'
+            self.wait_until_exists(enabled_button_selector.format(self.default_css_selector))
 
     def test_double_click_uses_only_a_single_attempt(self):
         """
