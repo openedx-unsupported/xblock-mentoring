@@ -434,8 +434,6 @@ class MentoringAssessmentTest(MentoringAssessmentBaseTest):
         """
         Test button is unblocked after a
         """
-        self.load_scenario("assessment_2.xml", load_immediately=False)
-        mentoring, controls = self.go_to_assessment()
 
         def replacement(*args, **kwargs):
             # Wait until disabled uses polling, if this function takes
@@ -446,9 +444,13 @@ class MentoringAssessmentTest(MentoringAssessmentBaseTest):
             raise ValueError()
 
         with mock.patch.object(MentoringBlock, 'submit', replacement):
+
+            self.load_scenario("assessment_2.xml", load_immediately=False)
+            mentoring, controls = self.go_to_assessment()
+
             self.just_select_on_a_single_choice_question(
                     0, mentoring, controls, "Yes", True)
-
+            self.timeout = 20
             controls.submit.click()
             self.wait_until_disabled(controls.submit)
             enabled_button_selector = '{} .submit input:not([disabled]).input-main'
