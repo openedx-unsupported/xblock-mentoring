@@ -32,7 +32,7 @@ import textwrap
 from collections import namedtuple
 
 from lxml import etree
-from StringIO import StringIO
+from io import StringIO
 
 from xblock.core import XBlock
 from xblock.fields import Boolean, Scope, String, Integer, Float, List

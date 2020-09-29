@@ -26,7 +26,7 @@ import os
 import pkg_resources
 import unicodecsv
 
-from cStringIO import StringIO
+from io import BytesIO as StringIO
 from django.template import Context, Template
 from xblock.fragment import Fragment
 

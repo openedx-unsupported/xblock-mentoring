@@ -53,7 +53,7 @@ class HTMLBlock(LightChild):
         node.tag = 'div'
         node_classes = (cls for cls in [node.get('class', ''), 'html_child'] if cls)
         node.set('class', " ".join(node_classes))
-        block.content = unicode(etree.tostring(node))
+        block.content = str(etree.tostring(node))
         node.tag = 'html'
 
         return block
@@ -68,7 +68,7 @@ class HTMLBlock(LightChild):
 
         # bug? got AssertionError if I don't use unicode here. (assert isinstance(content, unicode))
         # Although it is set when constructed?
-        return Fragment(unicode(self.content))
+        return Fragment(str(self.content))
 
     def mentoring_view(self, context=None):
         return self.student_view(context)

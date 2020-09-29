@@ -29,10 +29,10 @@ import json
 from lazy import lazy
 from weakref import WeakKeyDictionary
 
-from StringIO import StringIO
+from io import StringIO
 from lxml import etree
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from xblock.core import XBlock
 from xblock.fragment import Fragment
