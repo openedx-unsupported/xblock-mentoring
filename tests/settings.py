@@ -12,7 +12,7 @@ INSTALLED_APPS = (
     'workbench',
     'sample_xblocks.basic',
     'django_nose',
-    'mentoring'
+    'mentoring',
 )
 
 DATABASES = {
