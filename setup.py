@@ -69,7 +69,7 @@ setup(
     description='XBlock - Mentoring',
     packages=['mentoring', 'mentoring.migrations'],
     install_requires=[
-        'XBlock==0.4.1',
+        'XBlock==1.2.3',
         'xblock-utils==1.2.0',
     ],
     dependency_links = ['http://github.com/edx-solutions/xblock-utils/tarball/master#egg=xblock-utils'],
