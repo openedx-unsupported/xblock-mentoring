@@ -1,0 +1,65 @@
+name: Python CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - '**'
+
+
+jobs:
+  run_tests:
+    name: Tests
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-18.04
+        python-version:
+          - 3.8
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: setup python
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Setup Environment
+      run: |
+        export DISPLAY=:99.0
+        sudo apt-get install xvfb
+        wget https://github.com/mozilla/geckodriver/releases/download/v0.25.0/geckodriver-v0.25.0-linux64.tar.gz
+        mkdir geckodriver
+        tar -xzf geckodriver-v0.25.0-linux64.tar.gz -C geckodriver
+        export PATH=$PATH:$PWD/geckodriver
+        export BOKCHOY_HEADLESS=true     
+    - name: Setup Mysql
+      run: |
+        pip install mysqlclient==1.4.6
+        sudo /etc/init.d/mysql start
+        cat <<EOF | mysql -h 127.0.0.1 -u root --password=root
+          UPDATE mysql.user SET authentication_string = null WHERE user = 'root';
+          FLUSH PRIVILEGES;
+        EOF
+        echo 'set global wait_timeout=3600' | mysql -u root
+        mkdir -p var  # for var/workbench.log
+    - name: Install Firefox 61.0
+      run: |
+        sudo apt-get purge firefox
+        wget "https://ftp.mozilla.org/pub/firefox/releases/72.0.2/linux-x86_64/en-US/firefox-72.0.2.tar.bz2"
+        tar -xjf firefox-72.0.2.tar.bz2
+        sudo mv firefox /opt/firefox
+        sudo ln -s /opt/firefox/firefox /usr/bin/firefox
+    - name: Install Required System Packages
+      run: sudo apt-get update && sudo apt-get install libxmlsec1-dev ubuntu-restricted-extras xvfb
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+        pip install -r test_requirements.txt
+    - name: Run Tests
+      run: |
+        pycodestyle mentoring --max-line-length=120
+        pylint tests mentoring --unsafe-load-any-extension=y
+        xvfb-run --auto-servernum pytest tests --ds=settings_ci
